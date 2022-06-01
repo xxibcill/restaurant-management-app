@@ -1,0 +1,56 @@
+DROP TABLE "IngredientType";
+
+CREATE TABLE "IngredientType" (
+	"id"	INTEGER,
+	"name"	TEXT NOT NULL,
+	"category"	TEXT NOT NULL,
+	"yieldRatio"	REAL,
+	"unitOfMeasure"	TEXT,
+	"STDUnit" REAL,
+	"amountInSTDUnit" REAL,
+	"expireTimeDuration" INTEGER,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "Ingredient" (
+	"id"	INTEGER,
+	"type"	INTEGER NOT NULL,
+	"pricePerUnit"	INTEGER NOT NULL,
+	"amount"	INTEGER NOT NULL,
+	"accuiredDate"	TEXT NOT NULL,
+	"expiredDate"	TEXT NOT NULL,
+    FOREIGN KEY (type)
+       REFERENCES IngredientType (id)
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "Menu" (
+	"id"	INTEGER,
+	"name"	TEXT,
+	"salePrice"	REAL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+DROP TABLE "IngredientUsedInMenu";
+
+CREATE TABLE "IngredientUsedInMenu" (
+	"id"	INTEGER,
+	"ingredient"	INTEGER,
+	"amount"	REAL,
+	"menu"	INTEGER,
+	FOREIGN KEY (ingredient) REFERENCES IngredientType (id)
+	FOREIGN KEY (menu) REFERENCES Menu (id)
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+DROP TABLE "MenuInOrder";
+
+CREATE TABLE "MenuInOrder" (
+	"id"	INTEGER,
+	"menu"	INTEGER,
+	"date"	TEXT,
+	"discount"	REAL,
+	"orderHash"	TEXT,
+	FOREIGN KEY (menu) REFERENCES Menu (id)
+	PRIMARY KEY("id" AUTOINCREMENT)
+);

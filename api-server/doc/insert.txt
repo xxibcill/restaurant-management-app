@@ -1,0 +1,18 @@
+INSERT INTO IngredientType VALUES(NULL,'Milk','Daily',1.0,'1000 ml Bottle','ml',1000,21);
+INSERT INTO IngredientType VALUES(NULL,'Vanila Syrup','Syrup',1.0,'750 ml Bottle','ml',750,60);
+INSERT INTO IngredientType VALUES(NULL,'Condense Milk','Syrup',1.0,'1000 ml Bag','ml',1000,21);
+INSERT INTO IngredientType VALUES(NULL,'Sweet Condense Milk','Daily',1.0,'1000 ml Bag','ml',1000,10);
+
+INSERT INTO Ingredient VALUES(NULL,1,550.0,1,'2022-05-31T16:39:11.959Z','2022-05-31T16:39:11.959Z');
+INSERT INTO Ingredient VALUES(NULL,2,99.0,1,'2022-05-31T16:39:11.959Z','2022-05-31T16:39:11.959Z');
+INSERT INTO Ingredient VALUES(NULL,3,108.0,1,'2022-05-31T16:39:11.959Z','2022-05-31T16:39:11.959Z');
+
+INSERT INTO Menu VALUES(NULL,'Vanilla Milk',60.0);
+INSERT INTO Menu VALUES(NULL,'Strawberry Milk',70.0);
+
+INSERT INTO IngredientUsedInMenu VALUES(NULL,2,100.0,1);
+INSERT INTO IngredientUsedInMenu VALUES(NULL,1,20.0,1);
+INSERT INTO IngredientUsedInMenu VALUES(NULL,3,30.0,1);
+
+INSERT INTO MenuInOrder VALUES(NULL,1,'2022-05-31T16:39:11.959Z',30.0,"ashgerhjsadfksddf");
+
