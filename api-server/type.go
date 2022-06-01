@@ -40,3 +40,15 @@ type MenuInOrder struct {
 	discount  float32
 	orderHash string
 }
+
+type IngredientRequestBody struct {
+	Name   string `json:"name"`
+	Amount int32  `json:"amount"`
+}
+
+type CreateMenuRequestBody struct {
+	Name       string                  `json:"name"`
+	Ingredient []IngredientRequestBody `json:"ingredient"`
+	SalePrice  float32                 `json:"salePrice"`
+	Timestamp  string                  `json:"timestamp"`
+}

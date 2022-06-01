@@ -126,3 +126,27 @@ func getMenuInOrderFromID(db *sql.DB, id int32) []MenuInOrder {
 
 	return result
 }
+
+func getMenuIDFromName(db *sql.DB, name string) (id int32) {
+	queryString := fmt.Sprintf("SELECT id FROM Menu Where name = '%s'", name)
+	row, err := db.Query(queryString)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer row.Close()
+	row.Next()
+	row.Scan(&id)
+	return id
+}
+
+func getIngredientTypeIDFromName(db *sql.DB, name string) (id int32) {
+	queryString := fmt.Sprintf("SELECT id FROM IngredientType Where name = '%s'", name)
+	row, err := db.Query(queryString)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer row.Close()
+	row.Next()
+	row.Scan(&id)
+	return id
+}

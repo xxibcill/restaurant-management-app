@@ -31,7 +31,7 @@ func insertIngredient(sqliteDatabase *sql.DB, ingredientType int32, pricePerUnit
 	}
 }
 
-func insertMenu(sqliteDatabase *sql.DB, name string, salePrice int32) {
+func insertMenu(sqliteDatabase *sql.DB, name string, salePrice float32) {
 	insertQueryL := `INSERT INTO Menu VALUES(Null,?,?);`
 	statement, err := sqliteDatabase.Prepare(insertQueryL) // Prepare statement.
 	// This is good to avoid SQL injections

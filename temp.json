@@ -1,0 +1,19 @@
+{
+    "name": "Capuchino",  
+    "ingredient": [
+        {
+            "name" : "Milk",
+            "amount" : 100
+        },
+        {
+            "name" : "Condense Milk",
+            "amount" : 40
+        },
+        {
+            "name" : "Syrup",
+            "amount" : 20
+        }
+    ],
+    "salePrice": 65.0,
+    "timestamp": "2022-06-01T16:45:59.927Z"
+}
