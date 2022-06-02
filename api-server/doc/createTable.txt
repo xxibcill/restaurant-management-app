@@ -7,9 +7,11 @@ CREATE TABLE "IngredientType" (
 	"yieldRatio"	REAL,
 	"STDUnit" REAL,
 	"amountInSTDUnit" REAL,
-	"expireTimeDuration" INTEGER,
+	"expireTimeDuratio n" INTEGER,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
+
+DROP TABLE "Ingredient";
 
 CREATE TABLE "Ingredient" (
 	"id"	INTEGER,
