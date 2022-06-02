@@ -5,7 +5,6 @@ CREATE TABLE "IngredientType" (
 	"name"	TEXT NOT NULL,
 	"category"	TEXT NOT NULL,
 	"yieldRatio"	REAL,
-	"unitOfMeasure"	TEXT,
 	"STDUnit" REAL,
 	"amountInSTDUnit" REAL,
 	"expireTimeDuration" INTEGER,

@@ -5,7 +5,6 @@ type IngredientType struct {
 	name               string
 	category           string
 	yieldRatio         float32
-	unitOfMeasure      string
 	STDUnit            string
 	amountInSTDUnit    float32
 	expireTimeDuration int16

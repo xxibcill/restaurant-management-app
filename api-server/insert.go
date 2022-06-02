@@ -5,14 +5,14 @@ import (
 	"log"
 )
 
-func insertIngredientType(sqliteDatabase *sql.DB, name string, category string, yieldRatio float32, unitOfMeasure string, STDUnit string, amountInSTDUnit float32, expireTimeDuration int16) {
-	insertQueryL := `INSERT INTO IngredientType VALUES(Null,?,?,?,?,?,?,?);`
+func insertIngredientType(sqliteDatabase *sql.DB, name string, category string, yieldRatio float32, STDUnit string, amountInSTDUnit float32, expireTimeDuration int16) {
+	insertQueryL := `INSERT INTO IngredientType VALUES(Null,?,?,?,?,?,?);`
 	statement, err := sqliteDatabase.Prepare(insertQueryL) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
-	_, err = statement.Exec(name, category, yieldRatio, unitOfMeasure, STDUnit, amountInSTDUnit, expireTimeDuration)
+	_, err = statement.Exec(name, category, yieldRatio, STDUnit, amountInSTDUnit, expireTimeDuration)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}

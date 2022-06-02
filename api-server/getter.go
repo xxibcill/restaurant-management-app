@@ -21,12 +21,11 @@ func getIngredientTypeFromID(db *sql.DB, id int32) []IngredientType {
 		var name string
 		var category string
 		var yieldRatio float32
-		var unitOfMeasure string
 		var STDUnit string
 		var amountInSTDUnit float32
 		var expireTimeDuration int16
-		row.Scan(&id, &name, &category, &yieldRatio, &unitOfMeasure, &STDUnit, &amountInSTDUnit, &expireTimeDuration)
-		ingredient := IngredientType{id, name, category, yieldRatio, unitOfMeasure, STDUnit, amountInSTDUnit, expireTimeDuration}
+		row.Scan(&id, &name, &category, &yieldRatio, &STDUnit, &amountInSTDUnit, &expireTimeDuration)
+		ingredient := IngredientType{id, name, category, yieldRatio, STDUnit, amountInSTDUnit, expireTimeDuration}
 		result = append(result, ingredient)
 	}
 
