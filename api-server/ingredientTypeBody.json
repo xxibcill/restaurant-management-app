@@ -1,0 +1,9 @@
+{
+    "id" : "--",
+    "name" : "Syrup",
+    "category" : "Syrup",
+    "yeildRatio" : "1.0",
+    "stdUnit" : "ml",
+    "amountInSTDUnit" : "1000",
+    "expireTimeDuration" : "90"
+}

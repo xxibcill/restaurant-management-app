@@ -1,5 +1,14 @@
 package main
 
+type IngredientTypeRequestBody struct {
+	Name               string  `json:"name"`
+	Category           string  `json:"category"`
+	YieldRatio         float32 `json:"yieldRatio"`
+	STDUnit            string  `json:"stdUnit"`
+	AmountInSTDUnit    float32 `json:"amountInSTDUnit"`
+	ExpireTimeDuration int16   `json:"expireTimeDuration"`
+}
+
 type IngredientType struct {
 	id                 int32
 	name               string

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 )
 
@@ -17,14 +18,25 @@ func closeDBInstance(sqliteDatabase *sql.DB) {
 	sqliteDatabase.Close() // Closing the database
 }
 
-func main() {
+// global variable
+var sqliteDatabase *sql.DB
 
+func main() {
 	// // init db instance
-	sqliteDatabase := getDBInstance()
+	sqliteDatabase = getDBInstance()
 	defer closeDBInstance(sqliteDatabase)
 
-	insertExample(sqliteDatabase)
-	// s := getMenuInOrderFromID(sqliteDatabase, 1)
+	r := gin.Default()
+	r.POST("/createIngredient", postCreateIngredientType)
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+
+	// insertExample(sqliteDatabase)
+	// s := getIngredientTypeFromID(sqliteDatabase, 2)
 	// fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
 
 	// Data := []byte(`{
@@ -79,14 +91,6 @@ func createMenu(sqliteDatabase *sql.DB, jsonData []byte) {
 
 func insertExample(sqliteDatabase *sql.DB) {
 	// insert example
-	var name string = "Blue Sky Syrup"
-	var category string = "Syrup"
-	var yieldRatio float32 = 1.0
-	var STDUnit string = "ml"
-	var amountInSTDUnit float32 = 1000.0
-	var expireTimeDuration int16 = 90
-
-	insertIngredientType(sqliteDatabase, name, category, yieldRatio, STDUnit, amountInSTDUnit, expireTimeDuration)
 
 	// insertIngredient(ingredientType int32, pricePerUnit int32, amount int, accuiredDate string, expiredDate string)
 	// insertIngredient(sqliteDatabase, 1, 350, 1, "2022-06-01T09:19:43.454Z", "2022-08-01T09:19:43.454Z")

@@ -1,7 +1,8 @@
 .testComponent {
   width: 100vw;
   height: 100vh;
-  background-color: #41474A;
+  background-color: #ffffff;
+  /* background-color: #41474A; */
   display: flex;
   justify-content: center;
   align-items: center;
