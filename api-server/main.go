@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
 )
@@ -27,7 +28,9 @@ func main() {
 	defer closeDBInstance(sqliteDatabase)
 
 	r := gin.Default()
+	r.Use(cors.Default())
 	r.POST("/createIngredient", postCreateIngredientType)
+
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",

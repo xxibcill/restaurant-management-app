@@ -8,6 +8,7 @@ import InputLabel from '@mui/material/InputLabel';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { OutlinedInputProps } from '@mui/material/OutlinedInput';
 import { orange } from '@mui/material/colors';
+import axios from 'axios'
 
 type FormBoxProps = {
     children?: JSX.Element|JSX.Element[]
@@ -103,9 +104,10 @@ const FormBox = ({children}: FormBoxProps): JSX.Element => {
 
     const [unitSelected, setUnit] = useState('ml');
     const [name, setName] = useState('');
-    const [yieldRatio, setYieldRatio] = useState('');
-    const [amount, setAmount] = useState('');
-    const [etd, setETD] = useState('');
+    const [category, setCategory] = useState('');
+    const [yieldRatio, setYieldRatio] = useState<number>(0);
+    const [amount, setAmount] = useState<number>(0);
+    const [etd, setETD] = useState<number>(0);
 
     const handleUnitSelect = (event: SelectChangeEvent) => {
         setUnit(event.target.value as string);
@@ -113,28 +115,41 @@ const FormBox = ({children}: FormBoxProps): JSX.Element => {
 
     const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setName(event.target.value);
-    };
+    }; 
 
     const handleYieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setYieldRatio(event.target.value);
+        setYieldRatio(Number(event.target.value));
+    };
+
+    const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setCategory(event.target.value);
     };
 
     const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAmount(event.target.value);
+        setAmount(Number(event.target.value));
     };
 
     const handleETDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setETD(event.target.value);
+        setETD(Number(event.target.value));
     };
 
-    const handleSubmitClick = () => {
-        console.log("",{
-            name,
-            yieldRatio,
-            amount,
-            unitSelected,
-            etd
-        });
+    
+
+    const  handleSubmitClick = async () => {
+        const response = await axios({
+            method: 'post',
+            url: 'http://localhost:8080/createIngredient',
+            data: {
+                "name" : name,
+                "category" : category,
+                "yeildRatio" : yieldRatio,
+                "stdUnit" : unitSelected,
+                "amountInSTDUnit" : amount,
+                "expireTimeDuration" : etd
+            }
+        })
+        console.log(response.data);
+        
     };
 
     return(
@@ -145,6 +160,11 @@ const FormBox = ({children}: FormBoxProps): JSX.Element => {
                     <InputLabel shrink htmlFor="Name">Name</InputLabel>
                     <BootstrapInput id="Name" onChange={handleNameChange}/>
                     <FormHelperText id="my-helper-text">We'll never share your email.</FormHelperText>
+                </FormControl>
+
+                <FormControl variant="standard" sx={{marginTop:5}}>
+                    <InputLabel shrink htmlFor="category">Category</InputLabel>
+                    <BootstrapInput onChange={handleCategoryChange} id="category" />
                 </FormControl>
                     
                 <FormControl variant="standard" sx={{marginTop:5}}>
