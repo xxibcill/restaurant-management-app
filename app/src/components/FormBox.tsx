@@ -7,6 +7,10 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { OutlinedInputProps } from '@mui/material/OutlinedInput';
 import { orange } from '@mui/material/colors';
 import axios from 'axios'
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from "yup";
+import { FormikHelpers as FormikActions } from 'formik';
+import { resolve } from 'node:path/win32';
 
 type FormBoxProps = {
     children?: JSX.Element|JSX.Element[]
@@ -97,116 +101,137 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     },
 }));
 
+const ValidateIngredientTypeSchema = Yup.object().shape({
+    name: Yup.string()
+        .required('Required'),
+    category: Yup.string()
+        .required('Required'),
+    yieldRatio: Yup.number()
+        .required('Required'),
+    amountInSTDUnit: Yup.number()
+        .required('Required'),
+    STDUnit: Yup.string()
+        .required('Required'),
+    expireTimeDuration: Yup.number()
+        .required('Required'),
+});
+
+type FormikSubmitHandler<V> = (value: object, actions: FormikActions<V>) => void;
+
+interface FormValues {
+    name: string;
+    category: string;
+    yieldRatio: number;
+    amountInSTDUnit: number;
+    STDUnit: string;
+    expireTimeDuration: number
+}
+
   // Easiest way to declare a Function Component; return type is inferred.
 const FormBox = ({children}: FormBoxProps): JSX.Element => {
 
     const [unitSelected, setUnit] = useState('ml');
-    const [name, setName] = useState('');
-    const [category, setCategory] = useState('');
-    const [yieldRatio, setYieldRatio] = useState<number>(0);
-    const [amount, setAmount] = useState<number>(0);
-    const [etd, setETD] = useState<number>(0);
 
-    const handleUnitSelect = (event: SelectChangeEvent) => {
-        setUnit(event.target.value as string);
-    };
-
-    const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setName(event.target.value);
-    }; 
-
-    const handleYieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setYieldRatio(Number(event.target.value));
-    };
-
-    const handleCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCategory(event.target.value);
-    };
-
-    const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAmount(Number(event.target.value));
-    };
-
-    const handleETDChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setETD(Number(event.target.value));
-    };
-
-    
-
-    const  handleSubmitClick = async () => {
-        const response = await axios({
-            method: 'post',
-            url: 'http://localhost:8080/createIngredient',
-            data: {
-                "name" : name,
-                "category" : category,
-                "yeildRatio" : yieldRatio,
-                "stdUnit" : unitSelected,
-                "amountInSTDUnit" : amount,
-                "expireTimeDuration" : etd
-            }
-        })
-        console.log(response.data);
-        
+    const handleSubmit: FormikSubmitHandler<FormValues>  = async (values, formikBag) => {
+        formikBag.setSubmitting(true);
+        console.log(JSON.stringify(values, null, 2));
+        await new Promise((resolve) => {
+            setTimeout(resolve, 1000);
+        });
+        // const response = await axios({
+            
+        //     method: 'post',
+        //     url: 'http://localhost:8080/createIngredient',
+        //     data: {
+        //         "name" : name,
+        //         "category" : category,
+        //         "yeildRatio" : yieldRatio,
+        //         "stdUnit" : unitSelected,
+        //         "amountInSTDUnit" : amount,
+        //         "expireTimeDuration" : etd
+        //     }
+        // })
+        formikBag.setSubmitting(false);
     };
 
     return(
-        <Box sx={style}>
-            <ThemeProvider theme={theme}>
-
-                <FormControl color='success' variant="standard">
-                    <InputLabel shrink htmlFor="Name">Name</InputLabel>
-                    <BootstrapInput id="Name" onChange={handleNameChange}/>
-                    <FormHelperText id="my-helper-text">We'll never share your email.</FormHelperText>
-                </FormControl>
-
-                <FormControl variant="standard" sx={{marginTop:5}}>
-                    <InputLabel shrink htmlFor="category">Category</InputLabel>
-                    <BootstrapInput onChange={handleCategoryChange} id="category" />
-                </FormControl>
-                    
-                <FormControl variant="standard" sx={{marginTop:5}}>
-                    <InputLabel shrink htmlFor="yield">Yield</InputLabel>
-                    <BootstrapInput onChange={handleYieldChange} id="yield" type='number' />
-                </FormControl>
-
-                <Box sx={{marginTop:5}}>
-                    <FormControl variant="standard" >
-                        <InputLabel shrink htmlFor="amount">
-                        Amount
-                        </InputLabel>
-                        <BootstrapInput onChange={handleAmountChange} id="amount" type='number' />
-                    </FormControl>
-
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        value={unitSelected}
-                        label="Age"
-                        onChange={handleUnitSelect}
-                        sx={{marginTop: 3,marginLeft: 3,height:40}}
+        <ThemeProvider theme={theme}>
+                    <Formik
+                        initialValues={{
+                            name: "",
+                            category: "",
+                            yieldRatio: 0,
+                            amountInSTDUnit: 0,
+                            STDUnit: "",
+                            expireTimeDuration: 0
+                        }}
+                        validationSchema={ValidateIngredientTypeSchema}
+                        onSubmit={handleSubmit}
                     >
-                        {currencies.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                            {option.label}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </Box>
+                    {({ values,isSubmitting }) => (
+                        <Form>
+                        <pre>{`${JSON.stringify(values, null, 2)}  ${isSubmitting}`}</pre>
+                        <Box sx={style}>
 
-                <FormControl variant="standard" sx={{marginTop:5}}>
-                    <InputLabel shrink htmlFor="etd" >
-                    Expire Time Duration
-                    </InputLabel>
-                    <BootstrapInput onChange={handleETDChange} id="etd" type='number' />
-                    <FormHelperText id="etd-helper-text">How long this Ingredient last in Days</FormHelperText>
-                </FormControl>
+                            <FormControl color='success' variant="standard">
+                                <InputLabel shrink htmlFor="name">Name</InputLabel>
+                                <Field type="text" name="name" as={BootstrapInput} />
+                                <ErrorMessage name="name">
+                                    {msg => <FormHelperText error>{msg}</FormHelperText>}
+                                </ErrorMessage>
+                            </FormControl>
 
-            </ThemeProvider>
+                            <FormControl variant="standard" sx={{marginTop:5}}>
+                                <InputLabel shrink htmlFor="category">Category</InputLabel>
+                                <Field type="text" name="category" as={BootstrapInput} />
+                                <ErrorMessage name="category">
+                                    {msg => <FormHelperText error>{msg}</FormHelperText>}
+                                </ErrorMessage>
+                            </FormControl>
+                                
+                            <FormControl variant="standard" sx={{marginTop:5}}>
+                                <InputLabel shrink htmlFor="yieldRatio">Yield</InputLabel>
+                                <Field type="number" name="yieldRatio" as={BootstrapInput} />
+                                <ErrorMessage name="yieldRatio">
+                                    {msg => <FormHelperText error>{msg}</FormHelperText>}
+                                </ErrorMessage>
+                            </FormControl>
 
-            <Button onClick={handleSubmitClick} sx={{width:100,marginTop:4}} variant="contained">Submit</Button>
-            
-        </Box>
+                            <Box sx={{marginTop:5}}>
+                                <FormControl variant="standard" >
+                                    <InputLabel shrink htmlFor="amountInSTDUnit">Amount</InputLabel>
+                                    <Field type="number" name="amountInSTDUnit" as={BootstrapInput} />
+                                    <ErrorMessage name="amountInSTDUnit">
+                                        {msg => <FormHelperText error>{msg}</FormHelperText>}
+                                    </ErrorMessage>
+                                </FormControl>
+
+                                <Field
+                                    name="STDUnit"
+                                    sx={{marginTop: 3,marginLeft: 3,height:40}}
+                                    as={Select}
+                                >
+                                    {currencies.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </Field>
+                            </Box>
+                            <FormControl variant="standard" sx={{marginTop:5}}>
+                                <InputLabel shrink htmlFor="expireTimeDuration" >Expire Time Duration</InputLabel>
+                                <Field type="number" name="expireTimeDuration" as={BootstrapInput} />
+                                <ErrorMessage name="expireTimeDuration">
+                                    {msg => <FormHelperText error>{msg}</FormHelperText>}
+                                </ErrorMessage>
+                                <FormHelperText id="etd-helper-text">How long this Ingredient last in Days</FormHelperText>
+                            </FormControl>
+                            <Button disabled={isSubmitting} type='submit' sx={{width:100,marginTop:4}} variant="contained">Submit</Button>
+                        </Box>
+                    </Form>
+                )}
+                </Formik>
+        </ThemeProvider>
     )
   };
 

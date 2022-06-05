@@ -24,8 +24,8 @@ const rootBoxStyle = {
 const ForTestComponent = ({children}: FormBoxProps): JSX.Element => {
     return(
         <Box sx={rootBoxStyle}>
-          {/* <FormBox></FormBox> */}
-          <TestFormik/>
+          <FormBox></FormBox>
+          {/* <TestFormik/> */}
           {/* <FormikErr/> */}
         </Box>
     );
