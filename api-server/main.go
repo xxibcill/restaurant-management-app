@@ -95,6 +95,18 @@ func createMenu(sqliteDatabase *sql.DB, jsonData []byte) {
 func insertExample(sqliteDatabase *sql.DB) {
 	// insert example
 
+	_, err := insertIngredientType(IngredientTypeRequestBody{
+		Name:               "test",
+		Category:           "test",
+		YieldRatio:         1,
+		AmountInSTDUnit:    1,
+		STDUnit:            "ml",
+		ExpireTimeDuration: 1,
+	})
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+
 	// insertIngredient(ingredientType int32, pricePerUnit int32, amount int, accuiredDate string, expiredDate string)
 	// insertIngredient(sqliteDatabase, 1, 350, 1, "2022-06-01T09:19:43.454Z", "2022-08-01T09:19:43.454Z")
 

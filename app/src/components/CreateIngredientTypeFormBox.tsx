@@ -1,35 +1,17 @@
 import React ,{useState} from 'react'
-import {FormControl ,FormHelperText ,Select ,MenuItem ,SelectChangeEvent ,Button ,InputBase ,InputLabel } from '@mui/material';
+import {FormControl ,FormHelperText ,Select ,MenuItem ,Button ,InputBase ,InputLabel ,Typography } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { OutlinedInputProps } from '@mui/material/OutlinedInput';
-import { orange } from '@mui/material/colors';
 import axios from 'axios'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from "yup";
 import { FormikHelpers as FormikActions } from 'formik';
-import { resolve } from 'node:path/win32';
 
 type FormBoxProps = {
     children?: JSX.Element|JSX.Element[]
 }; /* use `interface` if exporting so that consumers can extend */
   
-// declare module '@mui/material/styles' {
-//     interface Theme {
-//       status: {
-//         danger: string;
-//       };
-//     }
-//     // allow configuration using `createTheme`
-//     interface ThemeOptions {
-//       status?: {
-//         danger?: string;
-//       };
-//     }
-//   }
-
 const theme = createTheme({
     palette: {
         primary: {
@@ -48,15 +30,13 @@ const theme = createTheme({
 });
 
 const style = {
-    width: 600,
-    height: 600,
     display: 'flex',
     flexDirection : 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
     boxShadow: 3,
     p: 5
-} as const;
+};
 
 const currencies = [
     {
@@ -107,16 +87,18 @@ const ValidateIngredientTypeSchema = Yup.object().shape({
     category: Yup.string()
         .required('Required'),
     yieldRatio: Yup.number()
+        .moreThan(0,"Value must be a  between 0 and 1")
+        .max(1,"Value must be a between 0 and 1")
         .required('Required'),
     amountInSTDUnit: Yup.number()
+        .moreThan(0,"Value must be more than 0")
         .required('Required'),
     STDUnit: Yup.string()
         .required('Required'),
     expireTimeDuration: Yup.number()
+        .moreThan(0,"Value must be more than 0")
         .required('Required'),
 });
-
-type FormikSubmitHandler<V> = (value: object, actions: FormikActions<V>) => void;
 
 interface FormValues {
     name: string;
@@ -127,52 +109,65 @@ interface FormValues {
     expireTimeDuration: number
 }
 
+type FormikSubmitHandler<V> = (value: FormValues, actions: FormikActions<V>) => void;
+
+
   // Easiest way to declare a Function Component; return type is inferred.
-const FormBox = ({children}: FormBoxProps): JSX.Element => {
+const CreateIngredientTypeFormBox = ({children}: FormBoxProps): JSX.Element => {
 
     const [unitSelected, setUnit] = useState('ml');
 
     const handleSubmit: FormikSubmitHandler<FormValues>  = async (values, formikBag) => {
         formikBag.setSubmitting(true);
         console.log(JSON.stringify(values, null, 2));
-        await new Promise((resolve) => {
-            setTimeout(resolve, 1000);
-        });
-        // const response = await axios({
-            
-        //     method: 'post',
-        //     url: 'http://localhost:8080/createIngredient',
-        //     data: {
-        //         "name" : name,
-        //         "category" : category,
-        //         "yeildRatio" : yieldRatio,
-        //         "stdUnit" : unitSelected,
-        //         "amountInSTDUnit" : amount,
-        //         "expireTimeDuration" : etd
-        //     }
-        // })
+        // await new Promise((resolve) => {
+        //     setTimeout(resolve, 1000);
+        // });
+        const response = await axios({
+            method: 'post',
+            url: 'http://localhost:8080/createIngredient',
+            data: {
+                "name" : "test",
+                "category" : "test",
+                "yieldRatio" : 1.0,
+                "stdUnit" : "ml",
+                "amountInSTDUnit" : 1000.0,
+                "expireTimeDuration" : 123
+            }
+            // data: {
+            //     "name" : values.name,
+            //     "category" : values.category,
+            //     "yieldRatio" : values.yieldRatio,
+            //     "stdUnit" : values.STDUnit,
+            //     "amountInSTDUnit" : values.amountInSTDUnit,
+            //     "expireTimeDuration" : values.expireTimeDuration
+            // }
+        })
+        console.log(response.data);
         formikBag.setSubmitting(false);
     };
 
     return(
         <ThemeProvider theme={theme}>
-                    <Formik
-                        initialValues={{
-                            name: "",
-                            category: "",
-                            yieldRatio: 0,
-                            amountInSTDUnit: 0,
-                            STDUnit: "",
-                            expireTimeDuration: 0
-                        }}
-                        validationSchema={ValidateIngredientTypeSchema}
-                        onSubmit={handleSubmit}
-                    >
-                    {({ values,isSubmitting }) => (
-                        <Form>
+            <Formik
+                initialValues={{
+                    name: "",
+                    category: "",
+                    yieldRatio: 0,
+                    amountInSTDUnit: 0,
+                    STDUnit: "ml",
+                    expireTimeDuration: 0
+                }}
+                validationSchema={ValidateIngredientTypeSchema}
+                onSubmit={handleSubmit}
+            >
+                {({ values,isSubmitting }) => (
+                    <Form>
                         <pre>{`${JSON.stringify(values, null, 2)}  ${isSubmitting}`}</pre>
                         <Box sx={style}>
-
+                            <Typography sx={{fontSize : 25}} variant="h1" component="h1" gutterBottom>
+                                create IngredientType
+                            </Typography>
                             <FormControl color='success' variant="standard">
                                 <InputLabel shrink htmlFor="name">Name</InputLabel>
                                 <Field type="text" name="name" as={BootstrapInput} />
@@ -218,6 +213,7 @@ const FormBox = ({children}: FormBoxProps): JSX.Element => {
                                     ))}
                                 </Field>
                             </Box>
+
                             <FormControl variant="standard" sx={{marginTop:5}}>
                                 <InputLabel shrink htmlFor="expireTimeDuration" >Expire Time Duration</InputLabel>
                                 <Field type="number" name="expireTimeDuration" as={BootstrapInput} />
@@ -226,13 +222,14 @@ const FormBox = ({children}: FormBoxProps): JSX.Element => {
                                 </ErrorMessage>
                                 <FormHelperText id="etd-helper-text">How long this Ingredient last in Days</FormHelperText>
                             </FormControl>
+
                             <Button disabled={isSubmitting} type='submit' sx={{width:100,marginTop:4}} variant="contained">Submit</Button>
                         </Box>
                     </Form>
                 )}
-                </Formik>
+            </Formik>
         </ThemeProvider>
     )
   };
 
-export default FormBox;
+export default CreateIngredientTypeFormBox;

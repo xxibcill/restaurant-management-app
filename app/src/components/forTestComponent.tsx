@@ -1,11 +1,7 @@
 import React from 'react'
 import {Button, TextField, MenuItem, Box} from '@mui/material';
-import FormBox from './FormBox';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CreateIngredientTypeFormBox from './CreateIngredientTypeFormBox';
 import Demo from './Demo'
-import { orange } from '@mui/material/colors';
-import TestFormik from "./testFormik"
-import { FormikErr } from './FormikErr';
 
 type FormBoxProps = {
     children?: JSX.Element|JSX.Element[]
@@ -23,11 +19,9 @@ const rootBoxStyle = {
   
 const ForTestComponent = ({children}: FormBoxProps): JSX.Element => {
     return(
-        <Box sx={rootBoxStyle}>
-          <FormBox></FormBox>
-          {/* <TestFormik/> */}
-          {/* <FormikErr/> */}
-        </Box>
+      <Box sx={rootBoxStyle}>
+        <CreateIngredientTypeFormBox></CreateIngredientTypeFormBox>
+      </Box>
     );
   };
 
