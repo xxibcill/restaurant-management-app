@@ -7,6 +7,7 @@ import axios from 'axios'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from "yup";
 import { FormikHelpers as FormikActions } from 'formik';
+import Unit from './Unit';
 
 type FormBoxProps = {
     children?: JSX.Element|JSX.Element[]
@@ -93,7 +94,7 @@ const ValidateIngredientTypeSchema = Yup.object().shape({
     amountInSTDUnit: Yup.number()
         .moreThan(0,"Value must be more than 0")
         .required('Required'),
-    STDUnit: Yup.string()
+    stdUnit: Yup.string()
         .required('Required'),
     expireTimeDuration: Yup.number()
         .moreThan(0,"Value must be more than 0")
@@ -206,9 +207,9 @@ const CreateIngredientTypeFormBox = ({children}: FormBoxProps): JSX.Element => {
                                     sx={{marginTop: 3,marginLeft: 3,height:40}}
                                     as={Select}
                                 >
-                                    {currencies.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
+                                    {Unit.map((option) => (
+                                        <MenuItem key={option} value={option}>
+                                        {option}
                                         </MenuItem>
                                     ))}
                                 </Field>
