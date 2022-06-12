@@ -6,6 +6,32 @@ import (
 	"log"
 )
 
+func getAllIngredientType() ([]IngredientType, error) {
+	queryString := "SELECT * FROM IngredientType"
+	row, err := sqliteDatabase.Query(queryString)
+	if err != nil {
+		return nil, err
+	}
+	defer row.Close()
+
+	result := []IngredientType{}
+
+	for row.Next() { // Iterate and fetch the records from result cursor
+		var id int32
+		var name string
+		var category string
+		var yieldRatio float32
+		var STDUnit string
+		var amountInSTDUnit float32
+		var expireTimeDuration int16
+		row.Scan(&id, &name, &category, &yieldRatio, &STDUnit, &amountInSTDUnit, &expireTimeDuration)
+		ingredient := IngredientType{id, name, category, yieldRatio, STDUnit, amountInSTDUnit, expireTimeDuration}
+		result = append(result, ingredient)
+	}
+
+	return result, nil
+}
+
 func getIngredientTypeFromID(db *sql.DB, id int32) []IngredientType {
 	queryString := fmt.Sprintf("SELECT * FROM IngredientType Where id = %d", id)
 	row, err := db.Query(queryString)
@@ -131,6 +157,7 @@ func getMenuIDFromName(db *sql.DB, name string) (id int32) {
 	row, err := db.Query(queryString)
 	if err != nil {
 		log.Fatal(err)
+		return 0
 	}
 	defer row.Close()
 	row.Next()

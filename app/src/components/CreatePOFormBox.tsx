@@ -92,7 +92,7 @@ type FormikSubmitHandler<V> = (value: FormValues, actions: FormikActions<V>) => 
 
 
   // Easiest way to declare a Function Component; return type is inferred.
-const CreateMenuFormBox = ({children}: FormBoxProps): JSX.Element => {
+const CreatePOFormBox = ({children}: FormBoxProps): JSX.Element => {
 
     const [ingredientLength,setIngredientLength] = useState(1);
     const [ingredientTypeList,setIngredientTypeList] = useState<IngredientType[]>([{
@@ -223,4 +223,4 @@ const CreateMenuFormBox = ({children}: FormBoxProps): JSX.Element => {
     )
   };
 
-export default CreateMenuFormBox;
+export default CreatePOFormBox;

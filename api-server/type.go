@@ -10,13 +10,20 @@ type IngredientTypeRequestBody struct {
 }
 
 type IngredientType struct {
-	id                 int32
-	name               string
-	category           string
-	yieldRatio         float32
-	STDUnit            string
-	amountInSTDUnit    float32
-	expireTimeDuration int16
+	ID                 int32   `json:"id"`
+	Name               string  `json:"name"`
+	Category           string  `json:"category"`
+	YieldRatio         float32 `json:"yieldRatio"`
+	STDUnit            string  `json:"stdUnit"`
+	AmountInSTDUnit    float32 `json:"amountInSTDUnit"`
+	ExpireTimeDuration int16   `json:"expireTimeDuration"`
+}
+
+type createMenuRequestBody struct {
+	Name            string    `json:"name"`
+	SalePrice       float32   `json:"salePrice"`
+	IngredientID    []int32   `json:"ingredientID"`
+	AmountInSTDUnit []float32 `json:"amountInSTDUnit"`
 }
 
 type Ingredient struct {

@@ -106,7 +106,7 @@ interface FormValues {
     category: string;
     yieldRatio: number;
     amountInSTDUnit: number;
-    STDUnit: string;
+    stdUnit: string;
     expireTimeDuration: number
 }
 
@@ -127,22 +127,22 @@ const CreateIngredientTypeFormBox = ({children}: FormBoxProps): JSX.Element => {
         const response = await axios({
             method: 'post',
             url: 'http://localhost:8080/createIngredient',
-            data: {
-                "name" : "test",
-                "category" : "test",
-                "yieldRatio" : 1.0,
-                "stdUnit" : "ml",
-                "amountInSTDUnit" : 1000.0,
-                "expireTimeDuration" : 123
-            }
             // data: {
-            //     "name" : values.name,
-            //     "category" : values.category,
-            //     "yieldRatio" : values.yieldRatio,
-            //     "stdUnit" : values.STDUnit,
-            //     "amountInSTDUnit" : values.amountInSTDUnit,
-            //     "expireTimeDuration" : values.expireTimeDuration
+            //     "name" : "test",
+            //     "category" : "test",
+            //     "yieldRatio" : 1.0,
+            //     "stdUnit" : "ml",
+            //     "amountInSTDUnit" : 1000.0,
+            //     "expireTimeDuration" : 123
             // }
+            data: {
+                "name" : values.name,
+                "category" : values.category,
+                "yieldRatio" : values.yieldRatio,
+                "stdUnit" : values.stdUnit,
+                "amountInSTDUnit" : values.amountInSTDUnit,
+                "expireTimeDuration" : values.expireTimeDuration
+            }
         })
         console.log(response.data);
         formikBag.setSubmitting(false);
@@ -156,7 +156,7 @@ const CreateIngredientTypeFormBox = ({children}: FormBoxProps): JSX.Element => {
                     category: "",
                     yieldRatio: 0,
                     amountInSTDUnit: 0,
-                    STDUnit: "ml",
+                    stdUnit: "ml",
                     expireTimeDuration: 0
                 }}
                 validationSchema={ValidateIngredientTypeSchema}
@@ -203,7 +203,7 @@ const CreateIngredientTypeFormBox = ({children}: FormBoxProps): JSX.Element => {
                                 </FormControl>
 
                                 <Field
-                                    name="STDUnit"
+                                    name="stdUnit"
                                     sx={{marginTop: 3,marginLeft: 3,height:40}}
                                     as={Select}
                                 >

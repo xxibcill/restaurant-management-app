@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 
 	"github.com/gin-contrib/cors"
@@ -30,66 +29,30 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
 	r.POST("/createIngredient", postCreateIngredientType)
+	r.POST("/getIngredientType", getIngredientType)
+	r.POST("/createMenu", postCreateMenu)
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
 	})
+
+	r.POST("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 
+	// ingredientTYpe, err := getAllIngredientType()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Printf("len=%d cap=%d %v\n", len(ingredientTYpe), cap(ingredientTYpe), ingredientTYpe)
 	// insertExample(sqliteDatabase)
 	// s := getIngredientTypeFromID(sqliteDatabase, 2)
 	// fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
-
-	// Data := []byte(`{
-	//     "name": "Capuchino",
-	//     "ingredient": [
-	// 		{
-	// 			"name" : "Milk",
-	// 			"amount" : 100
-	// 		},
-	// 		{
-	// 			"name" : "Condense Milk",
-	// 			"amount" : 40
-	// 		},
-	// 		{
-	// 			"name" : "Syrup",
-	// 			"amount" : 20
-	// 		}
-	// 	],
-	//     "salePrice": 65.0,
-	//     "timestamp": "2022-06-01T16:45:59.927Z"
-	// }`)
-	// createMenu(sqliteDatabase, Data)
-}
-
-func createMenu(sqliteDatabase *sql.DB, jsonData []byte) {
-	// defining a struct instance
-	var menu CreateMenuRequestBody
-
-	// decoding country1 struct
-	// from json format
-	err := json.Unmarshal(jsonData, &menu)
-
-	if err != nil {
-
-		// if error is not nil
-		// print error
-		fmt.Println(err)
-	}
-
-	fmt.Printf("%v", len(menu.Ingredient))
-
-	insertMenu(sqliteDatabase, menu.Name, menu.SalePrice)
-
-	menuid := getMenuIDFromName(sqliteDatabase, menu.Name)
-
-	for i := 0; i < len(menu.Ingredient); i++ {
-		ingredientTypeID := getIngredientTypeIDFromName(sqliteDatabase, menu.Ingredient[i].Name)
-		insertIngredientUsedInMenu(sqliteDatabase, ingredientTypeID, float32(menu.Ingredient[i].Amount), menuid)
-	}
-
 }
 
 func insertExample(sqliteDatabase *sql.DB) {
