@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -45,13 +43,13 @@ func getIngredientType(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 	}
 
-	jsonResult, err := json.Marshal(result)
-	fmt.Fprintf(os.Stdout, "%s", jsonResult)
-	c.JSON(http.StatusOK, gin.H{
-		"code":    http.StatusOK,
-		"message": string(jsonResult), // cast it to string before showing
-	})
-
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"ingredientType": result,
+		})
+	}
 }
 
 func postCreateIngredientType(c *gin.Context) {

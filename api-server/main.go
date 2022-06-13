@@ -28,15 +28,9 @@ func main() {
 
 	r := gin.Default()
 	r.Use(cors.Default())
+	r.GET("/getIngredientType", getIngredientType)
 	r.POST("/createIngredient", postCreateIngredientType)
-	r.POST("/getIngredientType", getIngredientType)
 	r.POST("/createMenu", postCreateMenu)
-
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
 
 	r.POST("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{

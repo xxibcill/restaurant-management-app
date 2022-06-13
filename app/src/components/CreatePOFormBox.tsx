@@ -8,8 +8,15 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from "yup";
 import { FormikHelpers as FormikActions } from 'formik';
 import Unit from './Unit.js'
-import { ingredientInMenuForm, IngredientType } from './../global/types';
+import { IngredientInMenuForm, IngredientType } from './../global/types';
 import IngredientFormBox from './IngredientFormBox'
+import { getIngredientTypeList } from "./utils"
+import ResponsiveDatePickers from './ResponsiveDatePickers'
+import AddIngredientInPO from './AddIngredientInPO';
+import BootstrapInput from './BootstrapInput';
+import {Ingredient} from '../global/types'
+import IngredientList from './IngredientList'
+
 
 type FormBoxProps = {
     children?: JSX.Element|JSX.Element[]
@@ -34,6 +41,7 @@ const theme = createTheme({
 
 const style = {
     display: 'flex',
+    width: 'auto',
     flexDirection : 'column',
     justifyContent: 'center',
     alignItems: 'flex-start',
@@ -41,34 +49,8 @@ const style = {
     p: 5
 };
 
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
-    'label + &': {
-      marginTop: theme.spacing(3),
-    },
-    '& .MuiInputBase-input': {
-      borderRadius: 4,
-      position: 'relative',
-      backgroundColor: theme.palette.mode === 'light' ? '#fcfcfb' : '#2b2b2b',
-      border: '1px solid #ced4da',
-      fontSize: 16,
-      width: 'auto',
-      padding: '10px 12px',
-      transition: theme.transitions.create([
-        'border-color',
-        'background-color',
-        'box-shadow',
-      ]),
-      '&:focus': {
-        boxShadow: `${alpha(theme.palette.success.main, 0.25)} 0 0 0 0.2rem`,
-        borderColor: theme.palette.success,
-      },
-    },
-}));
-
 const ValidateIngredientTypeSchema = Yup.object().shape({
-    name: Yup.string()
-        .required('Required'),
-    salePrice: Yup.string()
+    date: Yup.string()
         .required('Required'),
     ingredientID:  Yup.array()
         .of(
@@ -78,23 +60,28 @@ const ValidateIngredientTypeSchema = Yup.object().shape({
         .of(
             Yup.number()
         ),
+    pricePerUnit: Yup.array()
+        .of(
+            Yup.number()
+            .moreThan(0,"must be greater than 0")
+        ),
 
 });
 
 interface FormValues {
-    name: string;
-    salePrice: number;
-    ingredientID: number[]
+    date: Date;
+    ingredientTypeID: number[]
     amountInSTDUnit: number[]
+    pricePerUnit: number[]
+    expiredDate: Date[]
 }
 
 type FormikSubmitHandler<V> = (value: FormValues, actions: FormikActions<V>) => void;
 
-
-  // Easiest way to declare a Function Component; return type is inferred.
 const CreatePOFormBox = ({children}: FormBoxProps): JSX.Element => {
 
-    const [ingredientLength,setIngredientLength] = useState(1);
+    const [ingredients,setIngredients] = useState<Ingredient[]>([]);
+    const [value,setValue] = useState<Date>(new Date());
     const [ingredientTypeList,setIngredientTypeList] = useState<IngredientType[]>([{
         id : 1,
         name: "Milk",
@@ -105,43 +92,11 @@ const CreatePOFormBox = ({children}: FormBoxProps): JSX.Element => {
         expireTimeDuration : 21 
     }]);
 
-    const IngredientTypeMock: IngredientType[] = [
-        {
-            id : 1,
-            name: "Milk",
-            category: "Daily",  
-            yieldRatio: 1,
-            stdUnit: "ml",
-            amountInSTDUnit: 1000,
-            expireTimeDuration : 21 
-        },
-        {
-            id : 2,
-            name: "Strawberry",
-            category: "Frozen",  
-            yieldRatio: 1,
-            stdUnit: "kg",
-            amountInSTDUnit: 1,
-            expireTimeDuration : 30 
-        },
-        {
-            id : 3,
-            name: "Strawberry Syrup",
-            category: "Syrup",  
-            yieldRatio: 1,
-            stdUnit: "ml",
-            amountInSTDUnit: 750,
-            expireTimeDuration : 120 
-        }
-    ]
-
-    useEffect(()=>{
-        getIngredientTypeList();
+    useEffect( () => {
+        getIngredientTypeList().then((data)=>{
+            setIngredientTypeList(data)
+        })
     },[])
-
-    const getIngredientTypeList = ()=> {
-        setIngredientTypeList(IngredientTypeMock);
-    }
 
     const handleSubmit: FormikSubmitHandler<FormValues>  = async (values, formikBag) => {
         formikBag.setSubmitting(true);
@@ -158,50 +113,49 @@ const CreatePOFormBox = ({children}: FormBoxProps): JSX.Element => {
         formikBag.setSubmitting(false);
     };
 
+    const handleDateChange = (value:Date) => {
+        setValue(value)
+    }
+
+    const handleAddIngredient = (ingredient:Ingredient) => {
+        setIngredients([
+            ...ingredients,
+            ingredient
+        ])
+    }
+
     return(
         <ThemeProvider theme={theme}>
             <Formik
                 initialValues={{
-                    name : "test",
-                    salePrice : 1123,
-                    ingredientID: [1],
-                    amountInSTDUnit: [0]
+                    date : new Date(),
+                    ingredientTypeID: [1],
+                    amountInSTDUnit: [0],
+                    pricePerUnit: [0],
+                    expiredDate: [new Date()]
                 }}
-                validationSchema={ValidateIngredientTypeSchema}
+                // validationSchema={ValidateIngredientTypeSchema}
                 onSubmit={handleSubmit}
             >
                 {({ values,isSubmitting}) => (
                     <Form>
-                        <pre>{`${JSON.stringify(values, null, 2)} \n${isSubmitting}`}</pre>
+                        <pre>{`${JSON.stringify(value, null, 2)} \n${isSubmitting}`}</pre>
                         <Box sx={style}>
                             <Typography sx={{fontSize : 25,marginBottom:3}} variant="h1" component="h1" gutterBottom>
-                                create Menu Data
+                                please fill out Purchasing Order
                             </Typography>
                             <FormControl color='success' variant="standard">
-                                <InputLabel shrink htmlFor="name">Name</InputLabel>
-                                <Field type="text" name="name" as={BootstrapInput} />
+                                <ResponsiveDatePickers value={value} handleChange={handleDateChange} label="Purchased Date" name="date" />
                                 <ErrorMessage name="name">
                                     {msg => <FormHelperText error>{msg}</FormHelperText>}
                                 </ErrorMessage>
                             </FormControl>
 
-                            <FormControl color='success' variant="standard" sx={{marginTop:3}}>
-                                <InputLabel shrink htmlFor="salePrice">sale price</InputLabel>
-                                <Field type="number" name="salePrice" as={BootstrapInput} />
-                                <ErrorMessage name="salePrice">
-                                    {msg => <FormHelperText error>{msg}</FormHelperText>}
-                                </ErrorMessage>
-                            </FormControl>
+                            <IngredientList ingredientTypeList={ingredientTypeList} ingredients={ingredients}/>
 
-                            <Button 
-                                onClick={() => {setIngredientLength(ingredientLength+1); values.ingredientID.push(1);values.amountInSTDUnit.push(0);}}  
-                                sx={{width:100,marginTop:4}} 
-                                variant="contained"
-                            >
-                                    Add Ingredient
-                            </Button>
+                            <AddIngredientInPO ingredientTypeList={ingredientTypeList} addIngredient={handleAddIngredient} />
                             
-                            {
+                            {/* {
                                 Array.from(Array(ingredientLength),(x,i)=>i).map(
                                     (i) => (
                                         <IngredientFormBox 
@@ -212,7 +166,15 @@ const CreatePOFormBox = ({children}: FormBoxProps): JSX.Element => {
                                         />
                                     )
                                 )
-                            }
+                            } */}
+
+                            <FormControl color='success' variant="standard" sx={{marginTop:3}}>
+                                <InputLabel shrink htmlFor="totalDiscount">total discount</InputLabel>
+                                <Field type="number" name="totalDiscount" as={BootstrapInput} />
+                                <ErrorMessage name="totalDiscount">
+                                    {msg => <FormHelperText error>{msg}</FormHelperText>}
+                                </ErrorMessage>
+                            </FormControl>
                                 
                             <Button disabled={isSubmitting} type='submit' sx={{width:100,marginTop:4}} variant="contained">Submit</Button>
                         </Box>

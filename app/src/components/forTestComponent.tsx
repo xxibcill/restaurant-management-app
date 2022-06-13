@@ -1,8 +1,9 @@
 import React from 'react'
 import {Button, TextField, MenuItem, Box} from '@mui/material';
 import CreateIngredientTypeFormBox from './CreateIngredientTypeFormBox';
-import Demo from './Demo'
+import AddIngredientInPO from './AddIngredientInPO'
 import CreatePOFormBox from './CreatePOFormBox';
+import TestList from './TestList';
 
 type FormBoxProps = {
     children?: JSX.Element|JSX.Element[]
@@ -23,6 +24,8 @@ const ForTestComponent = ({children}: FormBoxProps): JSX.Element => {
       <Box sx={rootBoxStyle}>
         {/* <CreateIngredientTypeFormBox></CreateIngredientTypeFormBox> */}
         <CreatePOFormBox></CreatePOFormBox>
+        {/* <AddIngredientInPO/> */}
+        {/* <TestList/> */}
       </Box>
     );
   };

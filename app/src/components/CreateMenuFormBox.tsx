@@ -8,8 +8,9 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from "yup";
 import { FormikHelpers as FormikActions } from 'formik';
 import Unit from './Unit.js'
-import { ingredientInMenuForm, IngredientType } from './../global/types';
+import { IngredientType } from './../global/types';
 import IngredientFormBox from './IngredientFormBox'
+import { getIngredientTypeList } from "./utils"
 
 type FormBoxProps = {
     children?: JSX.Element|JSX.Element[]
@@ -139,22 +140,16 @@ const CreateMenuFormBox = ({children}: FormBoxProps): JSX.Element => {
         getIngredientTypeList();
     },[])
 
-    const getIngredientTypeList = ()=> {
-        setIngredientTypeList(IngredientTypeMock);
-    }
-
     const handleSubmit: FormikSubmitHandler<FormValues>  = async (values, formikBag) => {
         formikBag.setSubmitting(true);
         console.log(JSON.stringify(values, null, 2));
-        // await new Promise((resolve) => {
-        //     setTimeout(resolve, 1000);
-        // });
-        const response = await axios({
-            method: 'post',
-            url: 'http://localhost:8080/createMenu',
-            data: values
-        })
-        console.log(response.data);
+
+        // const response = await axios({
+        //     method: 'post',
+        //     url: 'http://localhost:8080/createMenu',
+        //     data: values
+        // })
+        // console.log(response.data);
         formikBag.setSubmitting(false);
     };
 

@@ -1,3 +1,7 @@
+DROP TABLE "Ingredient";
+DROP TABLE "IngredientUsedInMenu";
+DROP TABLE "Menu";
+DROP TABLE "MenuInOrder";
 DROP TABLE "IngredientType";
 
 CREATE TABLE "IngredientType" (
@@ -11,7 +15,6 @@ CREATE TABLE "IngredientType" (
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 
-DROP TABLE "Ingredient";
 
 CREATE TABLE "Ingredient" (
 	"id"	INTEGER,
@@ -25,6 +28,7 @@ CREATE TABLE "Ingredient" (
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 
+
 CREATE TABLE "Menu" (
 	"id"	INTEGER,
 	"name"	TEXT,
@@ -32,7 +36,7 @@ CREATE TABLE "Menu" (
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 
-DROP TABLE "IngredientUsedInMenu";
+
 
 CREATE TABLE "IngredientUsedInMenu" (
 	"id"	INTEGER,
@@ -44,7 +48,6 @@ CREATE TABLE "IngredientUsedInMenu" (
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 
-DROP TABLE "MenuInOrder";
 
 CREATE TABLE "MenuInOrder" (
 	"id"	INTEGER,
