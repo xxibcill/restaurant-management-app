@@ -5,7 +5,6 @@ export const getIngredientTypeList = async () => {
         method: 'get',
         url: 'http://localhost:8080/getIngredientType',
     })
-    console.log(response.data.ingredientType);
     return response.data.ingredientType;
 }
 

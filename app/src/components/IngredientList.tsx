@@ -24,10 +24,10 @@ const IngredientList = ({ ingredientTypeList ,ingredients }: IngredientListProps
                     >
                         <ListItemText primary={`${index+1}.`} />
                         <ListItemText primary={`${ingredientTypeList[ingredient.ingredientType].name}`} />
-                        <ListItemText primary={`${ingredient.amountInSTDUnit} Bottle`} />
-                        <IconButton aria-label="comment">
+                        <ListItemText primary={`${ingredient.amountInSTDUnit} ${ingredientTypeList[ingredient.ingredientType].stdUnit}`} />
+                        {/* <IconButton aria-label="comment">
                             <EditIcon />
-                        </IconButton>
+                        </IconButton> */}
                         <IconButton aria-label="comment">
                             <DeleteIcon />
                         </IconButton>

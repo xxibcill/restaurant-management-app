@@ -121,20 +121,10 @@ const CreateIngredientTypeFormBox = ({children}: FormBoxProps): JSX.Element => {
     const handleSubmit: FormikSubmitHandler<FormValues>  = async (values, formikBag) => {
         formikBag.setSubmitting(true);
         console.log(JSON.stringify(values, null, 2));
-        // await new Promise((resolve) => {
-        //     setTimeout(resolve, 1000);
-        // });
-        const response = await axios({
+
+        axios({
             method: 'post',
             url: 'http://localhost:8080/createIngredient',
-            // data: {
-            //     "name" : "test",
-            //     "category" : "test",
-            //     "yieldRatio" : 1.0,
-            //     "stdUnit" : "ml",
-            //     "amountInSTDUnit" : 1000.0,
-            //     "expireTimeDuration" : 123
-            // }
             data: {
                 "name" : values.name,
                 "category" : values.category,
@@ -144,8 +134,10 @@ const CreateIngredientTypeFormBox = ({children}: FormBoxProps): JSX.Element => {
                 "expireTimeDuration" : values.expireTimeDuration
             }
         })
-        console.log(response.data);
-        formikBag.setSubmitting(false);
+        .then(response=>{
+            console.log(response.data);
+            formikBag.setSubmitting(false);
+        })
     };
 
     return(

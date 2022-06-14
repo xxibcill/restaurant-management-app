@@ -82,7 +82,7 @@ const AddIngredientInPO = ({addIngredient,ingredientTypeList}:AddIngredientInPOP
         </FormControl>
 
         <FormControl color='success' variant="standard">
-            <InputLabel shrink htmlFor='pricePerUnit'>Price</InputLabel>
+            <InputLabel shrink htmlFor='pricePerUnit'>Total Price for this items</InputLabel>
             <BootstrapInput 
               type="text" 
               name='pricePerUnit'
@@ -90,7 +90,7 @@ const AddIngredientInPO = ({addIngredient,ingredientTypeList}:AddIngredientInPOP
         </FormControl>
 
         <FormControl color='success' variant="standard">
-            <InputLabel shrink htmlFor='amountInSTDUnit'>Amount</InputLabel>
+            <InputLabel shrink htmlFor='amountInSTDUnit'>amount</InputLabel>
             <BootstrapInput 
               type="text" 
               name='amountInSTDUnit'

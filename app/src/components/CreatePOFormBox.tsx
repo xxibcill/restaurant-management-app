@@ -3,7 +3,7 @@ import {FormControl ,FormHelperText ,Button ,InputLabel ,Typography } from '@mui
 import Box from '@mui/material/Box';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios'
-import { getIngredientTypeList } from "./utils"
+import { getIngredientTypeList , simpleHash } from "./utils"
 import ResponsiveDatePickers from './ResponsiveDatePickers'
 import AddIngredientInPO from './AddIngredientInPO';
 import BootstrapInput from './BootstrapInput';
@@ -64,17 +64,33 @@ const CreatePOFormBox = ({children}: FormBoxProps): JSX.Element => {
         })
     },[])
 
-    const handleSubmit = async () => {
-        // await new Promise((resolve) => {
+    const calculateTotalPrice = ():number => {
+        let sum = 0;
+        ingredients.forEach((item) => {sum = sum + (item.amountInSTDUnit*item.pricePerUnit)})
+        return sum;
+    }
 
-        //     setTimeout(resolve, 1000);
-        // });
-        // const response = await axios({
-        //     method: 'post',
-        //     url: 'http://localhost:8080/createMenu',
-        //     data: values
-        // })
+    const preprocessRequestBody = () => {
+        return ({
+            hash: simpleHash(new Date().toISOString()),
+            date: new Date().toISOString(),
+            discount: totalDiscount,
+            totalPrice: calculateTotalPrice(),
+            ingredients
+        })
+    } 
+
+    const handleSubmit = () => {
         console.log('submit');
+
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/createPO',
+            data: preprocessRequestBody()
+        })
+        .then((res)=>{
+            console.log(res);
+        })
     };
 
     const handleDateChange = (value:Date) => {
@@ -95,7 +111,6 @@ const CreatePOFormBox = ({children}: FormBoxProps): JSX.Element => {
     return(
         <ThemeProvider theme={theme}>
             <Box sx={style}>
-                <pre>{`${JSON.stringify(totalDiscount, null, 2)}`}</pre>
                 <Typography sx={{fontSize : 25,marginBottom:3}} variant="h1" component="h1" gutterBottom>
                     please fill out Purchasing Order
                 </Typography>
@@ -105,7 +120,7 @@ const CreatePOFormBox = ({children}: FormBoxProps): JSX.Element => {
 
                 <IngredientList ingredientTypeList={ingredientTypeList} ingredients={ingredients}/>
 
-                <AddIngredientInPO ingredientTypeList={ingredientTypeList} addIngredient={handleAddIngredient} />
+                {/* <AddIngredientInPO ingredientTypeList={ingredientTypeList} addIngredient={handleAddIngredient} /> */}
                 
                 <FormControl color='success' variant="standard" sx={{marginTop:3}}>
                     <InputLabel shrink htmlFor="totalDiscount">total discount</InputLabel>
