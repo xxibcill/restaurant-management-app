@@ -22,7 +22,7 @@ func postCreatePO(c *gin.Context) {
 		}
 
 		for i := 0; i < len(po.Ingredient); i++ {
-			success, err = insertIngredientViaRequest(po.Ingredient[i], po.Date)
+			success, err = insertIngredientViaRequest(po.Ingredient[i], po.Date, po.Hash)
 			if err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": err})
 			}

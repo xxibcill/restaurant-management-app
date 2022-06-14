@@ -75,8 +75,9 @@ func getIngredientFromID(db *sql.DB, id int32) []Ingredient {
 		var amount int32
 		var accuiredDate string
 		var expiredDate string
-		row.Scan(&id, &ingredientType, &pricePerUnit, &amount, &accuiredDate, &expiredDate)
-		ingredient := Ingredient{id, ingredientType, pricePerUnit, amount, accuiredDate, expiredDate}
+		var poHash string
+		row.Scan(&id, &ingredientType, &pricePerUnit, &amount, &accuiredDate, &expiredDate, &poHash)
+		ingredient := Ingredient{id, ingredientType, pricePerUnit, amount, accuiredDate, expiredDate, poHash}
 		result = append(result, ingredient)
 	}
 

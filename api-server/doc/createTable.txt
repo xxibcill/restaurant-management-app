@@ -24,8 +24,11 @@ CREATE TABLE "Ingredient" (
 	"amount"	INTEGER NOT NULL,
 	"accuiredDate"	TEXT NOT NULL,
 	"expiredDate"	TEXT NOT NULL,
+	"POHash"	TEXT NOT NULL,
     FOREIGN KEY (type)
        REFERENCES IngredientType (id)
+    FOREIGN KEY (POHash)
+       REFERENCES PurchaseOrder (hash)
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 

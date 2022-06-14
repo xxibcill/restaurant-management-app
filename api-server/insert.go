@@ -24,15 +24,15 @@ func insertIngredientType(ingredient IngredientTypeRequestBody) (bool, error) {
 	return true, nil
 }
 
-func insertIngredient(ingredient Ingredient, accuiredDate string) (bool, error) {
-	insertQueryL := `INSERT INTO Ingredient VALUES(Null,?,?,?,?,?);`
+func insertIngredient(ingredient Ingredient, accuiredDate string, hash string) (bool, error) {
+	insertQueryL := `INSERT INTO Ingredient VALUES(Null,?,?,?,?,?,?);`
 	statement, err := sqliteDatabase.Prepare(insertQueryL) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
 		log.Fatalln(err.Error())
 		return false, err
 	}
-	_, err = statement.Exec(ingredient.ingredientType, ingredient.pricePerUnit, ingredient.amount, accuiredDate, ingredient.expiredDate)
+	_, err = statement.Exec(ingredient.ingredientType, ingredient.pricePerUnit, ingredient.amount, accuiredDate, ingredient.expiredDate, hash)
 	if err != nil {
 		log.Fatalln(err.Error())
 		return false, err
@@ -40,15 +40,15 @@ func insertIngredient(ingredient Ingredient, accuiredDate string) (bool, error) 
 	return true, nil
 }
 
-func insertIngredientViaRequest(ingredient IngredientRequestBody, accuiredDate string) (bool, error) {
-	insertQueryL := `INSERT INTO Ingredient VALUES(Null,?,?,?,?,?);`
+func insertIngredientViaRequest(ingredient IngredientRequestBody, accuiredDate string, hash string) (bool, error) {
+	insertQueryL := `INSERT INTO Ingredient VALUES(Null,?,?,?,?,?,?);`
 	statement, err := sqliteDatabase.Prepare(insertQueryL) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
 		log.Fatalln(err.Error())
 		return false, err
 	}
-	_, err = statement.Exec(ingredient.IngredientType, ingredient.PricePerUnit, ingredient.AmountInSTDUnit, accuiredDate, ingredient.ExpiredDate)
+	_, err = statement.Exec(ingredient.IngredientType, ingredient.PricePerUnit, ingredient.AmountInSTDUnit, accuiredDate, ingredient.ExpiredDate, hash)
 	if err != nil {
 		log.Fatalln(err.Error())
 		return false, err
