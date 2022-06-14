@@ -24,17 +24,36 @@ func insertIngredientType(ingredient IngredientTypeRequestBody) (bool, error) {
 	return true, nil
 }
 
-func insertIngredient(ingredientType int32, pricePerUnit int32, amount int, accuiredDate string, expiredDate string) {
+func insertIngredient(ingredient Ingredient, accuiredDate string) (bool, error) {
 	insertQueryL := `INSERT INTO Ingredient VALUES(Null,?,?,?,?,?);`
 	statement, err := sqliteDatabase.Prepare(insertQueryL) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
 		log.Fatalln(err.Error())
+		return false, err
 	}
-	_, err = statement.Exec(ingredientType, pricePerUnit, amount, accuiredDate, expiredDate)
+	_, err = statement.Exec(ingredient.ingredientType, ingredient.pricePerUnit, ingredient.amount, accuiredDate, ingredient.expiredDate)
 	if err != nil {
 		log.Fatalln(err.Error())
+		return false, err
 	}
+	return true, nil
+}
+
+func insertIngredientViaRequest(ingredient IngredientRequestBody, accuiredDate string) (bool, error) {
+	insertQueryL := `INSERT INTO Ingredient VALUES(Null,?,?,?,?,?);`
+	statement, err := sqliteDatabase.Prepare(insertQueryL) // Prepare statement.
+	// This is good to avoid SQL injections
+	if err != nil {
+		log.Fatalln(err.Error())
+		return false, err
+	}
+	_, err = statement.Exec(ingredient.IngredientType, ingredient.PricePerUnit, ingredient.AmountInSTDUnit, accuiredDate, ingredient.ExpiredDate)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return false, err
+	}
+	return true, nil
 }
 
 func insertMenu(name string, salePrice float32) (bool, error) {
@@ -80,4 +99,20 @@ func insertMenuInOrder(menu int32, date string, discount float32, orderHash stri
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
+}
+
+func insertPurchaseOrder(hash string, date string, discount float32, totalPrice float32) (bool, error) {
+	insertQueryL := `INSERT INTO PurchaseOrder VALUES(?,?,?,?);`
+	statement, err := sqliteDatabase.Prepare(insertQueryL) // Prepare statement.
+	// This is good to avoid SQL injections
+	if err != nil {
+		log.Fatalln(err.Error())
+		return false, err
+	}
+	_, err = statement.Exec(hash, date, discount, totalPrice)
+	if err != nil {
+		log.Fatalln(err.Error())
+		return false, err
+	}
+	return true, nil
 }

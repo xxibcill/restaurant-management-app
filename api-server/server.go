@@ -14,28 +14,27 @@ func postCreatePO(c *gin.Context) {
 		fmt.Println(e)
 	}
 
-	c.JSON(http.StatusOK, gin.H{"PO": po})
+	poFromDB := getPurchaseOrderFromHash(po.Hash)
+	if poFromDB.hash == "" {
+		success, err := insertPurchaseOrder(po.Hash, po.Date, po.Discount, po.TotalPrice)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		}
 
-	// menuid := getMenuIDFromName(sqliteDatabase, menu.Name)
-	// if menuid != 0 {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "Menu already existed"})
-	// } else {
-	// 	success, err := insertMenu(menu.Name, menu.SalePrice)
+		for i := 0; i < len(po.Ingredient); i++ {
+			success, err = insertIngredientViaRequest(po.Ingredient[i], po.Date)
+			if err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": err})
+			}
+		}
 
-	// 	menuid = getMenuIDFromName(sqliteDatabase, menu.Name)
+		if success {
+			c.JSON(http.StatusOK, gin.H{"message": "Success"})
+		}
 
-	// 	fmt.Printf("%v", len(menu.IngredientID))
-
-	// 	for i := 0; i < len(menu.IngredientID); i++ {
-	// 		success, err = insertIngredientUsedInMenu(menu.IngredientID[i], menu.AmountInSTDUnit[i], menuid)
-	// 	}
-
-	// 	if success {
-	// 		c.JSON(http.StatusOK, gin.H{"message": "Success"})
-	// 	} else {
-	// 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
-	// 	}
-	// }
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "PurchaseOrder Hash is existed"})
+	}
 }
 
 func postCreateMenu(c *gin.Context) {

@@ -40,6 +40,10 @@ func main() {
 	})
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 
+	// po := getPurchaseOrderFromHash("1odowku")
+
+	// fmt.Printf("%+v\n", po)
+
 	// ingredientTYpe, err := getAllIngredientType()
 	// if err != nil {
 	// 	log.Fatal(err)
@@ -76,4 +80,6 @@ func insertExample(sqliteDatabase *sql.DB) {
 
 	// insertMenuInOrder(sqliteDatabase *sql.DB, menu int32, date string, discount float32, orderHash string)
 	// insertMenuInOrder(sqliteDatabase, 2, "2022-06-01T09:19:43.454Z", 0.0, "494nsng")
+
+	insertPurchaseOrder("494nsng", "2022-06-01T09:19:43.454Z", 0.0, 0.0)
 }

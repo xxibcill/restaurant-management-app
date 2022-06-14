@@ -60,7 +60,7 @@ CREATE TABLE "MenuInOrder" (
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 
-CREATE TABLE "PurchasingOrder" (
+CREATE TABLE "PurchaseOrder" (
 	"hash"	TEXT,
 	"date"	TEXT,
 	"discount"	REAL,

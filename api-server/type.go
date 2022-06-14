@@ -71,6 +71,13 @@ type MenuInOrder struct {
 	orderHash string
 }
 
+type PurchaseOrder struct {
+	hash       string
+	date       string
+	discount   float32
+	totalPrice float32
+}
+
 type IngredientInMenuRequestBody struct {
 	Name   string `json:"name"`
 	Amount int32  `json:"amount"`

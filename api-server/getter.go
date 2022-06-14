@@ -176,3 +176,23 @@ func getIngredientTypeIDFromName(db *sql.DB, name string) (id int32) {
 	row.Scan(&id)
 	return id
 }
+
+func getPurchaseOrderFromHash(hash string) (po PurchaseOrder) {
+	queryString := fmt.Sprintf("SELECT * FROM PurchaseOrder Where hash = '%s'", hash)
+	row, err := sqliteDatabase.Query(queryString)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer row.Close()
+	row.Next()
+
+	var hashOut string
+	var date string
+	var discount float32
+	var totalPrice float32
+
+	row.Scan(&hashOut, &date, &discount, &totalPrice)
+	po = PurchaseOrder{hashOut, date, discount, totalPrice}
+	row.Scan(&po)
+	return po
+}
