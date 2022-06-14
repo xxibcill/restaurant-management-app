@@ -2,7 +2,6 @@ import { useState } from 'react';
 import {Box ,Stack} from '@mui/material';
 import {FormControl ,FormHelperText ,InputLabel ,MenuItem ,Select ,Button} from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
-import { Field, ErrorMessage } from 'formik';
 import BootstrapInput from './BootstrapInput';
 import { styled } from '@mui/system';
 import { IngredientType } from './../global/types';
@@ -24,7 +23,7 @@ const CustomBox = styled(Box)(({ theme }) => ({
 const AddIngredientInPO = ({addIngredient,ingredientTypeList}:AddIngredientInPOProps) => {
 
   const [ingredient,setIngredient] = useState<Ingredient>({
-    ingredientType: 0,
+    ingredientType: 1,
     pricePerUnit: 0,
     amountInSTDUnit: 0,
     expiredDate: new Date() 
@@ -66,8 +65,6 @@ const AddIngredientInPO = ({addIngredient,ingredientTypeList}:AddIngredientInPOP
   return (
     <CustomBox>
       <Stack spacing={3}>
-          <pre>{`${JSON.stringify(ingredient, null, 2)}`}</pre>
-
           <FormControl color='success' variant="standard">
             <InputLabel shrink htmlFor='ingredientTypeID'>Type</InputLabel>
             <Select
@@ -103,7 +100,7 @@ const AddIngredientInPO = ({addIngredient,ingredientTypeList}:AddIngredientInPOP
         <ResponsiveDatePickers value={ingredient.expiredDate} handleChange={handleDateChange} label="Expired Date" name='expiredDate' />
 
         <Box sx={{display:'flex',justifyContent:'center'}}>
-          <Button onClick={handleClickSubmit} variant="contained">Submit</Button>
+          <Button onClick={handleClickSubmit} variant="contained">Add</Button>
         </Box>
 
       </Stack>

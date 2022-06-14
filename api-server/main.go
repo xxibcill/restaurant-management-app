@@ -31,6 +31,7 @@ func main() {
 	r.GET("/getIngredientType", getIngredientType)
 	r.POST("/createIngredient", postCreateIngredientType)
 	r.POST("/createMenu", postCreateMenu)
+	r.POST("/createPO", postCreatePO)
 
 	r.POST("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{

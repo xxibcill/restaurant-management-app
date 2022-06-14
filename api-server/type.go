@@ -1,5 +1,20 @@
 package main
 
+type PurchaseOrderRequestBody struct {
+	Hash       string                  `json:"hash"`
+	Date       string                  `json:"date"`
+	Ingredient []IngredientRequestBody `json:"ingredient"`
+	Discount   float32                 `json:"discount"`
+	TotalPrice float32                 `json:"totalPrice"`
+}
+
+type IngredientRequestBody struct {
+	IngredientType  int32   `json:"ingredientType"`
+	PricePerUnit    float32 `json:"pricePerUnit"`
+	AmountInSTDUnit int32   `json:"amountInSTDUnit"`
+	ExpiredDate     string  `json:"expiredDate"`
+}
+
 type IngredientTypeRequestBody struct {
 	Name               string  `json:"name"`
 	Category           string  `json:"category"`
@@ -56,14 +71,14 @@ type MenuInOrder struct {
 	orderHash string
 }
 
-type IngredientRequestBody struct {
+type IngredientInMenuRequestBody struct {
 	Name   string `json:"name"`
 	Amount int32  `json:"amount"`
 }
 
 type CreateMenuRequestBody struct {
-	Name       string                  `json:"name"`
-	Ingredient []IngredientRequestBody `json:"ingredient"`
-	SalePrice  float32                 `json:"salePrice"`
-	Timestamp  string                  `json:"timestamp"`
+	Name       string                        `json:"name"`
+	Ingredient []IngredientInMenuRequestBody `json:"ingredient"`
+	SalePrice  float32                       `json:"salePrice"`
+	Timestamp  string                        `json:"timestamp"`
 }

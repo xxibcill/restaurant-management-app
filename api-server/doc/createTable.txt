@@ -3,6 +3,7 @@ DROP TABLE "IngredientUsedInMenu";
 DROP TABLE "Menu";
 DROP TABLE "MenuInOrder";
 DROP TABLE "IngredientType";
+DROP TABLE "PurchasingOrder";
 
 CREATE TABLE "IngredientType" (
 	"id"	INTEGER,
@@ -57,4 +58,12 @@ CREATE TABLE "MenuInOrder" (
 	"orderHash"	TEXT,
 	FOREIGN KEY (menu) REFERENCES Menu (id)
 	PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE "PurchasingOrder" (
+	"hash"	TEXT,
+	"date"	TEXT,
+	"discount"	REAL,
+	"totalPrice"	REAL,
+	PRIMARY KEY("hash")
 );
