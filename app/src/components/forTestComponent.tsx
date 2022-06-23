@@ -28,6 +28,6 @@ const ForTestComponent = ({children}: FormBoxProps): JSX.Element => {
         {/* <TestList/> */}
       </Box>
     );
-  };
+};
 
 export default ForTestComponent;
