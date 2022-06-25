@@ -25,14 +25,14 @@ func insertIngredientType(ingredient IngredientTypeRequestBody) (bool, error) {
 }
 
 func insertIngredient(ingredient Ingredient, accuiredDate string, hash string) (bool, error) {
-	insertQueryL := `INSERT INTO Ingredient VALUES(Null,?,?,?,?,?,?);`
+	insertQueryL := `INSERT INTO Ingredient VALUES(Null,?,?,?,?,?,?,?);`
 	statement, err := sqliteDatabase.Prepare(insertQueryL) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
 		log.Fatalln(err.Error())
 		return false, err
 	}
-	_, err = statement.Exec(ingredient.ingredientType, ingredient.pricePerUnit, ingredient.amount, accuiredDate, ingredient.expiredDate, hash)
+	_, err = statement.Exec(ingredient.ingredientType, ingredient.pricePerUnit, ingredient.amount, accuiredDate, ingredient.expiredDate, hash, ingredient.isExpired)
 	if err != nil {
 		log.Fatalln(err.Error())
 		return false, err

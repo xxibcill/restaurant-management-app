@@ -25,6 +25,7 @@ CREATE TABLE "Ingredient" (
 	"accuiredDate"	TEXT NOT NULL,
 	"expiredDate"	TEXT NOT NULL,
 	"POHash"	TEXT NOT NULL,
+	"isExpired" BOOLEAN NOT NULL,
     FOREIGN KEY (type)
        REFERENCES IngredientType (id)
     FOREIGN KEY (POHash)

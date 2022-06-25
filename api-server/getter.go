@@ -32,6 +32,33 @@ func getAllIngredientType() ([]IngredientType, error) {
 	return result, nil
 }
 
+func getAllNonExpiredIngredient(db *sql.DB) []Ingredient {
+	queryString := "SELECT * FROM Ingredient Where isExpired = \"TRUE\""
+	row, err := db.Query(queryString)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer row.Close()
+
+	result := []Ingredient{}
+
+	for row.Next() { // Iterate and fetch the records from result cursor
+		var id int32
+		var ingredientType int32
+		var pricePerUnit int32
+		var amount int32
+		var accuiredDate string
+		var expiredDate string
+		var poHash string
+		var isExpired bool
+		row.Scan(&id, &ingredientType, &pricePerUnit, &amount, &accuiredDate, &expiredDate, &poHash)
+		ingredient := Ingredient{id, ingredientType, pricePerUnit, amount, accuiredDate, expiredDate, poHash, isExpired}
+		result = append(result, ingredient)
+	}
+
+	return result
+}
+
 func getIngredientTypeFromID(db *sql.DB, id int32) []IngredientType {
 	queryString := fmt.Sprintf("SELECT * FROM IngredientType Where id = %d", id)
 	row, err := db.Query(queryString)
@@ -76,8 +103,9 @@ func getIngredientFromID(db *sql.DB, id int32) []Ingredient {
 		var accuiredDate string
 		var expiredDate string
 		var poHash string
+		var isExpired bool
 		row.Scan(&id, &ingredientType, &pricePerUnit, &amount, &accuiredDate, &expiredDate, &poHash)
-		ingredient := Ingredient{id, ingredientType, pricePerUnit, amount, accuiredDate, expiredDate, poHash}
+		ingredient := Ingredient{id, ingredientType, pricePerUnit, amount, accuiredDate, expiredDate, poHash, isExpired}
 		result = append(result, ingredient)
 	}
 

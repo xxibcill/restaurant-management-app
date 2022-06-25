@@ -49,6 +49,7 @@ type Ingredient struct {
 	accuiredDate   string
 	expiredDate    string
 	poHash         string
+	isExpired      bool
 }
 
 type Menu struct {
