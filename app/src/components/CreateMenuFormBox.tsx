@@ -1,4 +1,4 @@
-import React ,{useEffect, useState} from 'react'
+import React ,{useContext, useEffect, useState} from 'react'
 import {FormControl ,FormHelperText ,Select ,MenuItem ,Button ,InputBase ,InputLabel ,Typography } from '@mui/material';
 import { alpha, styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -10,7 +10,7 @@ import { FormikHelpers as FormikActions } from 'formik';
 import Unit from './Unit.js'
 import { IngredientType } from './../global/types';
 import IngredientFormBox from './IngredientFormBox'
-import { getIngredientTypeList } from "./utils"
+import { useIngredientTypeList } from './providers/IngredientType'
 
 type FormBoxProps = {
     children?: JSX.Element|JSX.Element[]
@@ -96,50 +96,7 @@ type FormikSubmitHandler<V> = (value: FormValues, actions: FormikActions<V>) => 
 const CreateMenuFormBox = ({children}: FormBoxProps): JSX.Element => {
 
     const [ingredientLength,setIngredientLength] = useState(1);
-    const [ingredientTypeList,setIngredientTypeList] = useState<IngredientType[]>([{
-        id : 1,
-        name: "Milk",
-        category: "Daily",  
-        yieldRatio: 1,
-        stdUnit: "ml",
-        amountInSTDUnit: 1000,
-        expireTimeDuration : 21 
-    }]);
-
-    const IngredientTypeMock: IngredientType[] = [
-        {
-            id : 1,
-            name: "Milk",
-            category: "Daily",  
-            yieldRatio: 1,
-            stdUnit: "ml",
-            amountInSTDUnit: 1000,
-            expireTimeDuration : 21 
-        },
-        {
-            id : 2,
-            name: "Strawberry",
-            category: "Frozen",  
-            yieldRatio: 1,
-            stdUnit: "kg",
-            amountInSTDUnit: 1,
-            expireTimeDuration : 30 
-        },
-        {
-            id : 3,
-            name: "Strawberry Syrup",
-            category: "Syrup",  
-            yieldRatio: 1,
-            stdUnit: "ml",
-            amountInSTDUnit: 750,
-            expireTimeDuration : 120 
-        }
-    ]
-
-    useEffect(()=>{
-        getIngredientTypeList();
-    },[])
-
+    const ingredientTypeList = useIngredientTypeList()
     const handleSubmit: FormikSubmitHandler<FormValues>  = async (values, formikBag) => {
         formikBag.setSubmitting(true);
         console.log(JSON.stringify(values, null, 2));
@@ -152,6 +109,10 @@ const CreateMenuFormBox = ({children}: FormBoxProps): JSX.Element => {
         // console.log(response.data);
         formikBag.setSubmitting(false);
     };
+
+    useEffect(()=>{
+        console.log(ingredientTypeList);
+    },[])
 
     return(
         <ThemeProvider theme={theme}>

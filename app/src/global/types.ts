@@ -7,6 +7,7 @@ export interface IngredientType {
     amountInSTDUnit: number 
     expireTimeDuration : number   
 }
+
 export interface IngredientInMenuForm {
     ingredientType: IngredientType | {}
     amount: string

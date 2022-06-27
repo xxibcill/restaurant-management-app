@@ -3,7 +3,7 @@ import {Button, TextField, MenuItem, Box} from '@mui/material';
 import CreateIngredientTypeFormBox from './CreateIngredientTypeFormBox';
 import AddIngredientInPO from './AddIngredientInPO'
 import CreatePOFormBox from './CreatePOFormBox';
-import TestList from './TestList';
+import CreateMenuFormBox from './CreateMenuFormBox';
 
 type FormBoxProps = {
     children?: JSX.Element|JSX.Element[]
@@ -23,9 +23,9 @@ const ForTestComponent = ({children}: FormBoxProps): JSX.Element => {
     return(
       <Box sx={rootBoxStyle}>
         {/* <CreateIngredientTypeFormBox></CreateIngredientTypeFormBox> */}
-        <CreatePOFormBox></CreatePOFormBox>
+        {/* <CreatePOFormBox></CreatePOFormBox> */}
+        <CreateMenuFormBox/>
         {/* <AddIngredientInPO/> */}
-        {/* <TestList/> */}
       </Box>
     );
 };

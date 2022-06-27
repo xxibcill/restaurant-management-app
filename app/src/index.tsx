@@ -3,13 +3,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { useIngredientTypeList ,IngredientTypeProvider } from './components/providers/IngredientType';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <IngredientTypeProvider>
+      <App />
+    </IngredientTypeProvider>
   </React.StrictMode>
 );
 
