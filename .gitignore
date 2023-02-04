@@ -105,3 +105,4 @@ dist
 
 # sqlite db file
 .db
+api-server/restuarant-management.exe
